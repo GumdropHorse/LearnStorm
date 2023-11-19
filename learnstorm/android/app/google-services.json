@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "742349350458",
+    "project_id": "learnstorm-63eb7",
+    "storage_bucket": "learnstorm-63eb7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:742349350458:android:b09c2c9c3d763e92173703",
+        "android_client_info": {
+          "package_name": "com.example.learnstorm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRN2yZO4FLfHj8to5znM1j6GVqvlYvklM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

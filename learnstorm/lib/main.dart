@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'games/programming/game.dart';
+//import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 
-void main() {
+void main async() {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -281,15 +286,15 @@ class UserHome extends StatelessWidget {
                           },
                           child: Text('Close'),
                         ),
-                        /*TextButton(
+                        TextButton(
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => GamePage()),
+                              MaterialPageRoute(builder: (context) => ProgramGame()),
                             );
                           },
                           child: Text('Play'),
-                        ),*/           //THIS WILL BE THE 'PLAY BUTTON'
+                        ),           //THIS WILL BE THE 'PLAY BUTTON'
                       ],
                     );
                   }
