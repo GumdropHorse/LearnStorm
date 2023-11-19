@@ -1,14 +1,22 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'games/programming/game.dart';
-//import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import '../user_auth/firebase_auth_implementation.dart';
 
 
-void main async() {
+/*void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
-}
+}*/
+Future<void> main() async {    
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+  options: DefaultFirebaseOptions.currentPlatform,);
+  runApp(const MyApp());
+}  
 
 
 class MyApp extends StatelessWidget {
@@ -17,6 +25,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      routes: {
+        '/user': (context) => UserHome(),
+        //'/second': (context) => SecondScreen(),
+        // Add more named routes as needed
+      },
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -28,9 +42,9 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.lightBlue,
-        backgroundColor: const Color.fromARGB(255, 168, 222, 247),
-        scaffoldBackgroundColor: const Color.fromARGB(255, 168, 222, 247),
+        primarySwatch: Colors.deepPurple,
+        backgroundColor: Color.fromARGB(255, 241, 71, 250),
+        //scaffoldBackgroundColor: const Color.fromARGB(255, 168, 222, 247),
         //color: Colors.white,
         textTheme: const TextTheme(
           bodyText2: TextStyle(
@@ -115,31 +129,28 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: Container(
-        width: double.infinity, // Set width to fill the entire screen
-        height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color.fromARGB(255, 132, 203, 236), Color.fromARGB(255, 76, 175, 137)], // Adjust the gradient colors
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+      body: Stack(
+        fit: StackFit.expand,
+        children:[
             Image.asset(
-              'assets/logo.png',
-              width: 200,
-              height: 200,
+              'assets/galaxy_back.png', // Replace with your image asset
+              fit: BoxFit.cover,
             ),
-            SizedBox(height: 20),
-            Text(
-              'Who knew learning could be fun? - We did!',
-              style: TextStyle(fontSize: 24),
+            Column(
+              children: [
+                SizedBox(height: 120),
+                Image.asset(
+                  'assets/logo.png',
+                  width: 200,
+                  height: 200,
+                ),
+                SizedBox(height: 20),
+                Text('Who knew learning could be fun? - We did!',
+                  style: TextStyle(fontSize: 24),
+                ),
+              ],
             ),
-          ],
-        ),
+        ],
       ),
     );
   }
@@ -151,8 +162,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
 
+  bool _isSigning = false;
+  final FirebaseAuthService _auth = FirebaseAuthService();
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    //super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -160,44 +183,108 @@ class LoginScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Login'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Username',
-              ),
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset(
+              'assets/galaxy_back.png', // Replace with your image asset
+              fit: BoxFit.cover,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextField(
+                  controller: _emailController,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                  ),
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    labelStyle: TextStyle(
+                      color:Colors.white,
+                    ),
+                    hintStyle: TextStyle(
+                      color: Colors.white,
+                    ),
+                    enabledBorder: UnderlineInputBorder(      
+                      borderSide: BorderSide(color: Colors.white),   
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                TextField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    labelStyle: TextStyle(
+                      color:Colors.white,
+                    ),
+                    hintStyle: TextStyle(
+                      color: Colors.white,
+                    ),
+                    enabledBorder: UnderlineInputBorder(      
+                      borderSide: BorderSide(color: Colors.white),   
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    _signIn(context);
+                    /*Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => UserHome()),
+                    );*/
+                    // Do something
+                  },
+                  child: Text('Login'),
+                ),
+              ],
             ),
-            SizedBox(height: 10),
-            TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'Password',
-              ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UserHome()),
-                );
-                // Do something
-              },
-              child: Text('Login'),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+  }
+  void _signIn(BuildContext context) async {
+
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    User? user = await _auth.signInWithEmailAndPassword(email, password);
+
+    if (user != null) {
+      //showToast(message: "User is successfully signed in");
+      Navigator.pushNamed(context, "/user");
+    } else {
+      //do something
+    }
   }
 }
 
 
 class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({super.key});
+  SignUpScreen({super.key});
+
+  final FirebaseAuthService _auth = FirebaseAuthService();
+
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  bool isSigningUp = false;
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    //super.dispose();
+  }
 
 
   @override
@@ -206,40 +293,90 @@ class SignUpScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Sign Up'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Username',
-              ),
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset(
+              'assets/galaxy_back.png', // Replace with your image asset
+              fit: BoxFit.cover,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextField(
+                  decoration: InputDecoration(
+                    labelText: 'Username',
+                    labelStyle: TextStyle(
+                      color:Colors.white,
+                    ),
+                    hintStyle: TextStyle(
+                      color: Colors.white,
+                    ),
+                    enabledBorder: UnderlineInputBorder(      
+                      borderSide: BorderSide(color: Colors.white),   
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                TextField(
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    labelStyle: TextStyle(
+                      color:Colors.white,
+                    ),
+                    hintStyle: TextStyle(
+                      color: Colors.white,
+                    ),
+                    enabledBorder: UnderlineInputBorder(      
+                      borderSide: BorderSide(color: Colors.white),   
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                TextField(
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    labelStyle: TextStyle(
+                      color:Colors.white,
+                    ),
+                    hintStyle: TextStyle(
+                      color: Colors.white,
+                    ),
+                    enabledBorder: UnderlineInputBorder(      
+                      borderSide: BorderSide(color: Colors.white),   
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    // Do something
+                    _signUp(context);
+                  },
+                  child: Text('Sign Up'),
+                ),
+              ],
             ),
-            SizedBox(height: 10),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Email',
-              ),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'Password',
-              ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Do something
-              },
-              child: Text('Sign Up'),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+  }
+  void _signUp(BuildContext context) async {
+    String username = _usernameController.text.trim();
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    User? user = await _auth.signUpWithEmailAndPassword(password,email);
+    if (user != null) {
+      //showToast(message: "User is successfully created");
+      Navigator.pushNamed(context, "/user");
+    } else {
+      //showToast(message: "Some error happend");
+    }
   }
 }
 
@@ -255,6 +392,7 @@ class UserHome extends StatelessWidget {
         title: Text('LearnStorm'),
       ),
       drawer: Drawer(
+        backgroundColor: Colors.deepPurple,
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
@@ -271,14 +409,14 @@ class UserHome extends StatelessWidget {
               ),
             ),
             ListTile(
-              title: Text('Coding'),
+              title: Text('Planet Code',style: TextStyle(color: Colors.white,),),
               onTap: () {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
                       title: Text('Coding'),
-                      content: Text('Learn the principles of coding while helping [NAME] explore an alien planet!'),
+                      content: Text('Learn the principles of coding while helping Astro explore an alien planet!'),
                       actions: <Widget>[
                         TextButton(
                           onPressed: () {
@@ -302,14 +440,14 @@ class UserHome extends StatelessWidget {
               }
             ),
             ListTile(
-              title: Text('Reading'),
+              title: Text('Reading',style: TextStyle(color: Colors.white,),),
               onTap: () {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Reading'),
-                      content: Text('Game info'),
+                      title: Text('Proper Mars'),
+                      content: Text('Learn about proper nouns on Mars with Ray! COMING SOON!'),
                       actions: <Widget>[
                         TextButton(
                           onPressed: () {
@@ -333,14 +471,14 @@ class UserHome extends StatelessWidget {
               }
             ),
             ListTile(
-              title: Text('Writing'),
+              title: Text('Writing',style: TextStyle(color: Colors.white,),),
               onTap: () {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Writing'),
-                      content: Text('Game info'),
+                      title: Text('Type it Up'),
+                      content: Text('Quick! The International Space Station needs your help! COMING SOON!'),
                       actions: <Widget>[
                         TextButton(
                           onPressed: () {
@@ -364,15 +502,15 @@ class UserHome extends StatelessWidget {
               }
             ),
             ListTile(
-              title: Text('Math'),
+              title: Text('Math',style: TextStyle(color: Colors.white,),),
               onTap: () {
                 // Show a dialog when "Show Element" is selected
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Math'),
-                      content: Text('Game info'),
+                      title: Text('Counting Stars'),
+                      content: Text('Count the constellations. COMING SOON!'),
                       actions: <Widget>[
                         TextButton(
                           onPressed: () {
@@ -396,15 +534,15 @@ class UserHome extends StatelessWidget {
               }
             ),
             ListTile(
-              title: Text('Science'),
+              title: Text('Science',style: TextStyle(color: Colors.white,),),
               onTap: () {
                 // Show a dialog when "Show Element" is selected
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Science'),
-                      content: Text('Game info'),
+                      title: Text('Rock Star'),
+                      content: Text('Discover new things about rocks in space. COMING SOON!'),
                       actions: <Widget>[
                         TextButton(
                           onPressed: () {
@@ -428,15 +566,15 @@ class UserHome extends StatelessWidget {
               }
             ),
             ListTile(
-              title: Text('History'),
+              title: Text('History',style: TextStyle(color: Colors.white,),),
               onTap: () {
                 // Show a dialog when "Show Element" is selected
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('History'),
-                      content: Text('Game info'),
+                      title: Text('Discovery Race'),
+                      content: Text('Help Dorian uncover the ancient secrets of how people have viewed the solar system. COMING SOON!'),
                       actions: <Widget>[
                         TextButton(
                           onPressed: () {
@@ -462,11 +600,20 @@ class UserHome extends StatelessWidget {
           ],
         ),
       ),
-      body: const Center(
-        child: Text(
-          'Welcome to your home page!',
-          style: TextStyle(fontSize: 24),
-        ),
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset(
+              'assets/galaxy_back.png', // Replace with your image asset
+              fit: BoxFit.cover,
+          ),
+          const Center(
+            child: Text(
+              'Welcome Rachel!',
+              style: TextStyle(fontSize: 24),
+            ),
+          ),
+        ],
       ),
     );
   }

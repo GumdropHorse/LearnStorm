@@ -21,7 +21,10 @@ class DefaultFirebaseOptions {
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return android;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for android - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
@@ -44,38 +47,29 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDBM8wsjuHwQMRYue8fb0sg_G9ghbGb1Q8',
-    appId: '1:742349350458:web:9c4fd3c45d98c3cb173703',
-    messagingSenderId: '742349350458',
-    projectId: 'learnstorm-63eb7',
-    authDomain: 'learnstorm-63eb7.firebaseapp.com',
-    storageBucket: 'learnstorm-63eb7.appspot.com',
-    measurementId: 'G-8WG5J001TM',
-  );
-
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCRN2yZO4FLfHj8to5znM1j6GVqvlYvklM',
-    appId: '1:742349350458:android:b09c2c9c3d763e92173703',
-    messagingSenderId: '742349350458',
-    projectId: 'learnstorm-63eb7',
-    storageBucket: 'learnstorm-63eb7.appspot.com',
+    apiKey: 'AIzaSyC_zuJNUiMCHmSewf3qLyTem_uKmKt2Oa8',
+    appId: '1:202644670015:web:9b4de0daefc951ead1da8a',
+    messagingSenderId: '202644670015',
+    projectId: 'learnstorm',
+    authDomain: 'learnstorm.firebaseapp.com',
+    storageBucket: 'learnstorm.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDXZepykIjfQUaEimGGXKL3p5nnjvp7kEY',
-    appId: '1:742349350458:ios:663ab2e2abe81f17173703',
-    messagingSenderId: '742349350458',
-    projectId: 'learnstorm-63eb7',
-    storageBucket: 'learnstorm-63eb7.appspot.com',
+    apiKey: 'AIzaSyDkHDYOmCuSaQDICzEGAh5FY17m9wBlz54',
+    appId: '1:202644670015:ios:f8e4f74f35bb1557d1da8a',
+    messagingSenderId: '202644670015',
+    projectId: 'learnstorm',
+    storageBucket: 'learnstorm.appspot.com',
     iosBundleId: 'com.example.learnstorm',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDXZepykIjfQUaEimGGXKL3p5nnjvp7kEY',
-    appId: '1:742349350458:ios:663ab2e2abe81f17173703',
-    messagingSenderId: '742349350458',
-    projectId: 'learnstorm-63eb7',
-    storageBucket: 'learnstorm-63eb7.appspot.com',
+    apiKey: 'AIzaSyDkHDYOmCuSaQDICzEGAh5FY17m9wBlz54',
+    appId: '1:202644670015:ios:f8e4f74f35bb1557d1da8a',
+    messagingSenderId: '202644670015',
+    projectId: 'learnstorm',
+    storageBucket: 'learnstorm.appspot.com',
     iosBundleId: 'com.example.learnstorm',
   );
 }
