@@ -415,7 +415,7 @@ class UserHome extends StatelessWidget {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Coding'),
+                      title: Text('Planet Code'),
                       content: Text('Learn the principles of coding while helping Astro explore an alien planet!'),
                       actions: <Widget>[
                         TextButton(
@@ -440,7 +440,7 @@ class UserHome extends StatelessWidget {
               }
             ),
             ListTile(
-              title: Text('Reading',style: TextStyle(color: Colors.white,),),
+              title: Text('Proper Mars',style: TextStyle(color: Colors.white,),),
               onTap: () {
                 showDialog(
                   context: context,
@@ -471,7 +471,7 @@ class UserHome extends StatelessWidget {
               }
             ),
             ListTile(
-              title: Text('Writing',style: TextStyle(color: Colors.white,),),
+              title: Text('Type it Up',style: TextStyle(color: Colors.white,),),
               onTap: () {
                 showDialog(
                   context: context,
@@ -502,7 +502,7 @@ class UserHome extends StatelessWidget {
               }
             ),
             ListTile(
-              title: Text('Math',style: TextStyle(color: Colors.white,),),
+              title: Text('Counting Stars',style: TextStyle(color: Colors.white,),),
               onTap: () {
                 // Show a dialog when "Show Element" is selected
                 showDialog(
@@ -534,7 +534,7 @@ class UserHome extends StatelessWidget {
               }
             ),
             ListTile(
-              title: Text('Science',style: TextStyle(color: Colors.white,),),
+              title: Text('Rock Star',style: TextStyle(color: Colors.white,),),
               onTap: () {
                 // Show a dialog when "Show Element" is selected
                 showDialog(
@@ -566,7 +566,7 @@ class UserHome extends StatelessWidget {
               }
             ),
             ListTile(
-              title: Text('History',style: TextStyle(color: Colors.white,),),
+              title: Text('Discovery Race',style: TextStyle(color: Colors.white,),),
               onTap: () {
                 // Show a dialog when "Show Element" is selected
                 showDialog(
